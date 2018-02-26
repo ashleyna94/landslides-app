@@ -1,0 +1,1 @@
+ web: gunicorn landslides.app:app

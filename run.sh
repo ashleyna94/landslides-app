@@ -1,0 +1,1 @@
+FLASK_APP=landslides/app.py flask run
