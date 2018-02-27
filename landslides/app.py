@@ -10,6 +10,11 @@ from flask import (
     request,
     redirect)
 
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
+import os
+
 #################################################
 # Flask Setup
 #################################################
@@ -18,58 +23,38 @@ app = Flask(__name__)
 #################################################
 # Database Setup
 #################################################
-from flask_sqlalchemy import SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "") or "sqlite:///landslides_db.sqlite"
+Base = automap_base()
 
-db = SQLAlchemy(app)
-from .models import Landslides
+engine = create_engine(os.environ.get("DATABASE_URL"))
 
+# reflect the tables
+Base.prepare(engine, reflect=True)
+
+# mapped classes are now created with names by default
+# matching that of the table name.
+Landslides = Base.classes.landslides
+session = Session(engine)
 
 # create route that renders index.html template
 @app.route("/")
 def home():
     return render_template("index.html")
 
-# Query the database and send the jsonified results
-@app.route("/send", methods=["GET", "POST"])
-def send():
-    if request.method == "POST":
-        name = request.form["petName"]
-        lat = request.form["petLat"]
-        lon = request.form["petLon"]
+@app.route("/api/geodata")
+def geo():
+    results = session.query(Landslides.hazard_type, Landslides.latitude, Landslides.longitude).all()
 
-        landslide = Landslides(country=name, latitude=lat, longitude=lon)
-        db.session.add(landslide)
-        db.session.commit()
-        return redirect("http://localhost:5000/", code=302)
+    hazard_type = [result[0] for result in results]
+    latitude = [result[1] for result in results]
+    longitude = [result[2] for result in results]
 
-    return render_template("form.html")
-
-@app.route("/api/pals")
-def pals():
-    results = db.session.query(Pet.country, Pet.latitude, Pet.longitude).all()
-
-    hover_text = [result[0] for result in results]
-    lat = [result[1] for result in results]
-    lon = [result[2] for result in results]
-
-    pet_data = [{
-        "type": "scattergeo",
-        "locationmode": "USA-states",
-        "lat": lat,
-        "lon": lon,
-        "text": hover_text,
-        "hoverinfo": "text",
-        "marker": {
-            "size": 50,
-            "line": {
-            "color": "rgb(8,8,8)",
-            "width": 1
-            },
-        }
+    geo_data = [{
+        "hazard_type": hazard_type,
+        "latitude": latitude,
+        "longitude": longitude
     }]
 
-    return jsonify(pet_data)
+    return jsonify(geo_data)
 
 if __name__ == "__main__":
     app.run()
