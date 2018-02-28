@@ -55,7 +55,7 @@ def geo():
 
 @app.route("/api/leaflet")
 def landslide_map():
-    results = session.query(Landslides.latitude, Landslides.longtiude, Landslides.landslide_size, Landslides.landslide_type, Landslides.trigger).all()
+    results = session.query(Landslides.latitude, Landslides.longitude, Landslides.landslide_size, Landslides.landslide_type, Landslides.trigger).all()
 
     latitude = [result[0] for result in results]
     longitude = [result[1] for result in results]
