@@ -74,10 +74,36 @@ def landslide_map():
 
     return jsonify(mylist)
 
+<<<<<<< HEAD
+@app.route("/api/leaflet/geojson")
+def leaflet_geojson():
+    sel = [Landslides.latitude, Landslides.longitude, Landslides.landslide_size, Landslides.landslide_type, Landslides.trigger]
+
+    results = session.query(*sel).all()
+
+    mylist = []
+
+    for result in results:
+        landslide_map = {}
+        landslide_map["type"] = "Feature"
+        landslide_map["geometry"] = {}
+        landslide_map["geometry"]["type"] = "Point"
+        landslide_map["geometry"]["coordinates"] = [result[0], result[1]]
+        landslide_map["properties"] = {}
+        landslide_map["properties"]["landslide_size"] = result[2]
+        landslide_map["properties"]["landslide_type"] = result[3]
+        landslide_map["properties"]["trigger"] = result[4]
+        mylist.append(landslide_map)
+    
+    geojson = {"type": "FeatureCollection", "features": mylist}
+
+    return jsonify(geojson)
+=======
 @app.route("/api/vis")
 def clean_data_for_vis():
 
     return jsonify(clean_data_viz())
+>>>>>>> master
 
 if __name__ == "__main__":
     app.run()
