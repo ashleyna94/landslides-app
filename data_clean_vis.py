@@ -11,7 +11,7 @@ def clean_data_viz():
     Base.prepare(engine, reflect=True)
     Landslides = Base.classes.landslides
     session = Session(engine)
-    results = session.query(Landslides.latitude, Landslides.longitude, Landslides.fatalities, Landslides.countrycode, Landslide.continentcode).all()
+    results = session.query(Landslides.latitude, Landslides.longitude, Landslides.fatalities, Landslides.countrycode, Landslides.continentcode).all()
 
     # create lists to be turned into database
     latitude = []
