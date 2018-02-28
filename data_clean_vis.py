@@ -47,7 +47,7 @@ def clean_data_viz():
     groupby_object = data_v2.groupby(['continent_code', 'country_code']).sum()
     # reset index 
     # TADA final set
-    final_data = groupby_object.reset_index(drop=True)
+    final_data = groupby_object.reset_index()
     final_dict = final_data.to_dict(orient='records')
 
     return final_dict
