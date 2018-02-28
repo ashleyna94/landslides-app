@@ -9,8 +9,8 @@ buildPlot();
 // create an array with nodes
 var nodes = new vis.DataSet([
     // inner circle nodes
-    { id: 1, label: 'Asia', color: '#27213C' },
-    { id: 2, label: 'Africa', color: '#5A352A' },
+    { id: 1, label: 'Asia', color: '#4E495F' },
+    { id: 2, label: 'Africa', color: '#876C64' },
     { id: 3, label: 'North America', color: '#A33B20' },
     { id: 4, label: 'South America', color: '#A47963' },
     { id: 5, label: 'Antartica', color: '#DEEAEA' },
