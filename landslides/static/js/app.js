@@ -9,13 +9,13 @@ buildPlot();
 // create an array with nodes
 var nodes = new vis.DataSet([
     // inner circle nodes
-    { id: 1, label: 'Asia', color: '#4E495F', shape: 'circle', font: 'white'},
-    { id: 2, label: 'Africa', color: '#876C64', shape: 'circle', font: 'white'},
-    { id: 3, label: 'North America', color: '#A33B20', shape: 'circle', font: 'white'},
-    { id: 4, label: 'South America', color: '#A47963', shape: 'circle', font: 'white'},
-    { id: 5, label: 'Antartica', color: '#DEEAEA', shape: 'circle', font: 'white'},
-    { id: 6, label: 'Europe', color: '#A6A57A', shape: 'circle', font: 'white'},
-    { id: 7, label: 'Oceania', color: '#78A5A5', shape: 'circle', font: 'white'}
+    { id: 1, label: 'Asia', color: '#4E495F', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
+    { id: 2, label: 'Africa', color: '#876C64', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
+    { id: 3, label: 'North America', color: '#A33B20', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
+    { id: 4, label: 'South America', color: '#A47963', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
+    { id: 5, label: 'Antartica', color: '#DEEAEA', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
+    { id: 6, label: 'Europe', color: '#A6A57A', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
+    { id: 7, label: 'Oceania', color: '#78A5A5', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}}
 ]);
 // below code is used to add countries from json file into viz
 var vis_link = "/api/vis"
