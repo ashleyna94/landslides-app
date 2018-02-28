@@ -1,4 +1,4 @@
-# import necessary libraries
+# Import necessary libraries
 import os
 import numpy as np
 from sqlalchemy.ext.automap import automap_base
@@ -57,16 +57,21 @@ def geo():
 def landslide_map():
     results = session.query(Landslides.latitude, Landslides.longtiude, Landslides.landslide_size, Landslides.landslide_type, Landslides.trigger).all()
 
-    landslide_map_dict = {}
+    latitude = [result[0] for result in results]
+    longitude = [result[1] for result in results]
+    landslide_size = [result[2] for result in results]
+    landslide_type = [result[3] for result in results]
+    trigger = [result[4] for result in results]
 
-    for result in results:
-        landslide_map_dict["Latitude"] = result[0]
-        landslide_map_dict["Longitude"] = result[1]
-        landslide_map_dict["Landslide Size"] = result[2]
-        landslide_map_dict["Landslide Type"] = result[3]
-        landslide_map_dict["Trigger"] = result[4]
+    landslide_map_list = [{
+        "latitude": latitude,
+        "longitude": longitude, 
+        "landslide_size": landslide_size, 
+        "landslide_type": landslide_type, 
+        "trigger": trigger
+    }]
 
-    return jsonify(landslide_map_dict)
+    return jsonify(landslide_map_list)
 
 if __name__ == "__main__":
     app.run()
