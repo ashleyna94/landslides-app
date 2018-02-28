@@ -63,7 +63,7 @@ def landslide_map():
         landslide_map_dict["Latitude"] = result[0]
         landslide_map_dict["Longitude"] = result[1]
         landslide_map_dict["Landslide Size"] = result[2]
-        landslide_map_dict["Landslide Type"]= result[3]
+        landslide_map_dict["Landslide Type"] = result[3]
         landslide_map_dict["Trigger"] = result[4]
 
     return jsonify(landslide_map_dict)
