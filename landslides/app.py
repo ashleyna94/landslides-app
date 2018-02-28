@@ -55,23 +55,22 @@ def geo():
 
 @app.route("/api/leaflet")
 def landslide_map():
-    results = session.query(Landslides.latitude, Landslides.longitude, Landslides.landslide_size, Landslides.landslide_type, Landslides.trigger).all()
+    sel = [Landslides.latitude, Landslides.longitude, Landslides.landslide_size, Landslides.landslide_type, Landslides.trigger]
 
-    latitude = [result[0] for result in results]
-    longitude = [result[1] for result in results]
-    landslide_size = [result[2] for result in results]
-    landslide_type = [result[3] for result in results]
-    trigger = [result[4] for result in results]
+    results = session.query(*sel).all()
 
-    landslide_map_list = [{
-        "latitude": latitude,
-        "longitude": longitude, 
-        "landslide_size": landslide_size, 
-        "landslide_type": landslide_type, 
-        "trigger": trigger
-    }]
+    mylist = []
+    
+    for result in results:
+        landslide_map = {}
+        landslide_map["latitude"] = result[0]
+        landslide_map["longitude"] = result[1]
+        landslide_map["landslide_size"] = result[2]
+        landslide_map["landslide_type"] = result[3]
+        landslide_map["trigger"] = result[4]
+        mylist.append(landslide_map)
 
-    return jsonify(landslide_map_list)
+    return jsonify(mylist)
 
 if __name__ == "__main__":
     app.run()
