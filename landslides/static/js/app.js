@@ -6,6 +6,7 @@ function buildPlot() {
 
 buildPlot();
 
+function buildNetworkVis() {
 // create an array with nodes
 var nodes = new vis.DataSet([
     // inner circle nodes
@@ -88,3 +89,7 @@ var options = {};
 
 // initialize your network!
 var network = new vis.Network(container, data, options);
+
+}
+
+buildNetworkVis():
