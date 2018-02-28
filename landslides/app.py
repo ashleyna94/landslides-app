@@ -10,6 +10,8 @@ from flask import (
     jsonify,
     request,
     redirect)
+# Python script for cleaning data
+from data_clean_vis import clean_data_viz
 
 
 #################################################
@@ -71,6 +73,11 @@ def landslide_map():
         mylist.append(landslide_map)
 
     return jsonify(mylist)
+
+@app.route("/api/vis")
+def clean_data_for_vis():
+
+    return jsonify(clean_data_viz())
 
 if __name__ == "__main__":
     app.run()
