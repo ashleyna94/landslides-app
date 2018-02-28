@@ -10,6 +10,8 @@ from flask import (
     jsonify,
     request,
     redirect)
+# Python script for cleaning data
+from data_clean_vis import clean_data_viz
 
 
 #################################################
@@ -22,7 +24,7 @@ app = Flask(__name__)
 #################################################
 Base = automap_base()
 
-engine = create_engine(os.environ.get("DATABASE_URL"))
+engine = create_engine("postgres://vyavhewrhtvpzj:807f060f51c5988773c3dcd6bd68b769cfe69d8826b5ec5dd17b28d1d4e3af9e@ec2-54-225-249-161.compute-1.amazonaws.com:5432/d9fsrm70s2042g")
 
 # Reflect the tables
 Base.prepare(engine, reflect=True)
@@ -71,6 +73,11 @@ def landslide_map():
         mylist.append(landslide_map)
 
     return jsonify(mylist)
+
+@app.route("/api/vis")
+def clean_data_for_vis():
+
+    return jsonify(clean_data_viz())
 
 if __name__ == "__main__":
     app.run()
