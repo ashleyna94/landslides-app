@@ -9,13 +9,13 @@ buildPlot();
 // create an array with nodes
 var nodes = new vis.DataSet([
     // inner circle nodes
-    { id: 1, label: 'Asia' },
-    { id: 2, label: 'Africa' },
-    { id: 3, label: 'North America' },
-    { id: 4, label: 'South America' },
-    { id: 5, label: 'Antartica' },
-    { id: 6, label: 'Europe' },
-    { id: 7, label: 'Oceania' }
+    { id: 1, label: 'Asia', color: '#27213C' },
+    { id: 2, label: 'Africa', color: '#5A352A' },
+    { id: 3, label: 'North America', color: '#A33B20' },
+    { id: 4, label: 'South America', color: '#A47963' },
+    { id: 5, label: 'Antartica', color: '#DEEAEA' },
+    { id: 6, label: 'Europe', color: '#A6A57A' },
+    { id: 7, label: 'Oceania', color: '#78A5A5' }
 ]);
 // below code is used to add countries from json file into viz
 var vis_link = "/api/vis"
