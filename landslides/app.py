@@ -10,6 +10,8 @@ from flask import (
     jsonify,
     request,
     redirect)
+# Python script for cleaning data
+from data_clean_vis import clean_data_viz
 
 
 #################################################
@@ -72,6 +74,7 @@ def landslide_map():
 
     return jsonify(mylist)
 
+<<<<<<< HEAD
 @app.route("/api/leaflet/geojson")
 def leaflet_geojson():
     sel = [Landslides.latitude, Landslides.longitude, Landslides.landslide_size, Landslides.landslide_type, Landslides.trigger]
@@ -95,6 +98,12 @@ def leaflet_geojson():
     geojson = {"type": "FeatureCollection", "features": mylist}
 
     return jsonify(geojson)
+=======
+@app.route("/api/vis")
+def clean_data_for_vis():
+
+    return jsonify(clean_data_viz())
+>>>>>>> master
 
 if __name__ == "__main__":
     app.run()
