@@ -34,10 +34,29 @@ Base.prepare(engine, reflect=True)
 Landslides = Base.classes.landslides
 session = Session(engine)
 
+
 # Create a route that renders index.html template
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+# create a route that outputs unique country names
+@app.route("/api/countrynames")
+def getCountryNames():
+
+    # Use Pandas to perform the sql query to obtain the unique country names
+    stmt = session.query(Landslides).statement
+    df = pd.read_sql_query(stmt, session.bind)
+    df = df[df['countryname']!="NaN"]
+    df = df[df['date']!="NaN"]
+    df['date'] = df['date'].apply(lambda x: datetime.strptime(x, "%m/%d/%Y"))
+    df['year'] = df['date'].dt.year
+    countriesList = list(df['countryname'].unique())
+
+    # Return a list of the unique country names
+    return jsonify(countriesList)
+
 
 @app.route("/api/geodata")
 def geo():
@@ -102,9 +121,15 @@ def leaflet_geojson():
     geojson = {"type": "FeatureCollection", "features": mylist, "crs": crsdict}
     
     return jsonify(geojson)
+
+
 @app.route("/api/vis")
 def clean_data_for_vis():
     return jsonify(clean_data_viz())
+
+
+
+
 
 if __name__ == "__main__":
     app.run()
