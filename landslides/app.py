@@ -72,7 +72,8 @@ def dataford3plot(selectedcountry):
     df['date'] = df['date'].apply(lambda x: datetime.strptime(x, "%m/%d/%Y"))
     df['year'] = df['date'].dt.year
     df = df.groupby(['countryname', 'year'])['id'].count().reset_index(level='year')
-    dict_for_d3 = df.loc[selectedcountry].to_dict(orient='records')
+    df = df.loc[selectedcountry]
+    dict_for_d3 = df.to_dict(orient='records')
 
     # Return a list of the unique country names
     return jsonify(dict_for_d3)
