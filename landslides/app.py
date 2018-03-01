@@ -62,7 +62,7 @@ def getCountryNames():
 
 # create a route that outputs landslide count by year for selected country
 @app.route("/api/<selectedcountry>")
-def getCountryNames(selectedcountry):
+def dataford3plot(selectedcountry):
 
     # Use Pandas to perform the sql query to obtain the unique country names
     stmt = session.query(Landslides).statement
