@@ -60,6 +60,24 @@ def getCountryNames():
     return jsonify(countriesList)
 
 
+# create a route that outputs landslide count by year for selected country
+@app.route("/api/<selectedcountry>")
+def getCountryNames(selectedcountry):
+
+    # Use Pandas to perform the sql query to obtain the unique country names
+    stmt = session.query(Landslides).statement
+    df = pd.read_sql_query(stmt, session.bind)
+    df = df[df['countryname']!="NaN"]
+    df = df[df['date']!="NaN"]
+    df['date'] = df['date'].apply(lambda x: datetime.strptime(x, "%m/%d/%Y"))
+    df['year'] = df['date'].dt.year
+    df = df.groupby(['countryname', 'year'])['id'].count().reset_index(level='year')
+    dict_for_d3 = df.loc[selectedcountry].to_dict(orient='records')
+
+    # Return a list of the unique country names
+    return jsonify(dict_for_d3)
+
+
 @app.route("/api/geodata")
 def geo():
     results = session.query(Landslides.hazard_type, Landslides.latitude, Landslides.longitude).all()
