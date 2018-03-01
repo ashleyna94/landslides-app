@@ -3,3 +3,7 @@ body{
     font-size: 16px;
 }
 
+#mynetwork {
+    width: 100vh;
+    height: 80vh;
+}
