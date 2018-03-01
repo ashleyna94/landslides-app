@@ -104,7 +104,6 @@ def leaflet_geojson():
     return jsonify(geojson)
 @app.route("/api/vis")
 def clean_data_for_vis():
-
     return jsonify(clean_data_viz())
 
 if __name__ == "__main__":
