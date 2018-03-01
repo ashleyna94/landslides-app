@@ -24,7 +24,7 @@ d3.json(vis_link, function (error, data) {
 
     data.forEach(function (value, index) {
         nodes.add({
-            id: (index + 8), size: (Math.log((1 + value.fatalities))), label: value.country_code, shape: 'dot'
+            id: (index + 8), size: (Math.log((1 + value.fatalities)) + 30), label: value.country_code, shape: 'dot'
         });
     })
 });
