@@ -6,4 +6,5 @@ body{
 #mynetwork {
     width: 100vh;
     height: 80vh;
+    align-content: center;
 }
