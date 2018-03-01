@@ -72,6 +72,7 @@ def dataford3plot(selectedcountry):
     df['date'] = df['date'].apply(lambda x: datetime.strptime(x, "%m/%d/%Y"))
     df['year'] = df['date'].dt.year
     df = df.groupby(['countryname', 'year'])['id'].count().reset_index(level='year')
+    df.columns= ['year','count']
     df = df.loc[selectedcountry]
     json_for_d3 = df.to_json(orient='records')
 
