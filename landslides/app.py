@@ -13,7 +13,7 @@ from flask import (
     request,
     redirect)
 # Python script for cleaning data
-from data_clean_vis import clean_data_viz
+# from data_clean_vis import clean_data_viz
 
 
 #################################################
