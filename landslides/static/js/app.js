@@ -8,7 +8,7 @@ d3.json(queryUrl, function(data) {
   // Create a map object
   var myMap = L.map("map", {
     center: [37.09, -95.71],
-    zoom: 3
+    zoom: 2
   });
   
   // Add a tile layer
@@ -21,7 +21,7 @@ d3.json(queryUrl, function(data) {
 // Create rain icon variable
 var landslideIcon = L.icon({
     iconUrl: '/static/js/landslideicon.png',
-    iconSize: [30,20]
+    iconSize: [15,10]
 });
 
 for (var i = 0; i < data.features.length; i++) {
