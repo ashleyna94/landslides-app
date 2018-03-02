@@ -54,7 +54,7 @@ d3.json(queryUrl, function(data) {
     for (var i = 0; i < data.length; i++) {
        L.circle(data.features[i].geometry.coordinates, {
          fillOpacity: 0.75,
-         color: "white",
+         color: "black",
          fillColor: "purple",
          // Setting our circle's radius equal to the output of our markerSize function
          // This will make our marker's size proportionate to its population
