@@ -1,10 +1,39 @@
-function buildPlot() {
-    /* data route */
-    var url = "/api/pals";
-    // @TODO: Create your plot here
+
+// populate country names
+function getCountryName() {
+
+    // Grab a reference to the dropdown select element
+    var selector = document.getElementById("selDataset");
+
+    // Use the list of sample names to populate the select options
+    d3.json("/api/countrynames",function(error,countryNames){
+
+        for(var i=0; i<countryNames.length;i++){
+            var currentOption = document.createElement('option')
+            currentOption.text = countryNames[i]
+            currentOption.value = countryNames[i]
+            selector.appendChild(currentOption);
+        }
+    })
+};
+
+function optionChanged(country){
+    // fetch new data each time a new country is selected
+    var getCountryUrl = "/api/"+country;
+    d3.json(getCountryUrl,function(error,countryData){
+        debug = countryData;
+    });
+};
+
+
+function init(){
+    getCountryName();
 }
 
-buildPlot();
+// Initialize the dashboard
+init();
+
+
 
 // create an array with nodes
 var nodes = new vis.DataSet([
