@@ -13,6 +13,8 @@ function getCountryName() {
     // Use the list of sample names to populate the select options
     d3.json("/api/countrynames", function (error, countryNames) {
 
+        countryNames.sort();
+
         for (var i = 0; i < countryNames.length; i++) {
             var currentOption = document.createElement('option')
             currentOption.text = countryNames[i]
@@ -23,7 +25,7 @@ function getCountryName() {
 };
 
 var base_url = "/api/"
-getData(base_url + "United Kingdom");
+getData(base_url + "Afghanistan");
 
 function getData(url) {
     d3.json(url, function (data) {
