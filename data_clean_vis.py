@@ -45,11 +45,14 @@ def clean_data_viz():
 
     # group df by continent then country
     groupby_object = data_v2.groupby(['continent_code', 'country_code']).sum()
+    groupby_object_landslide = data_v2.groupby(['continent_code', 'country_code']).count()
     # reset index 
     # TADA final set
-    final_data = groupby_object.reset_index()
-    final_dict = final_data.to_dict(orient='records')
+    final_data_fatalities = groupby_object_fatalities.reset_index()
+    final_dict_fatalities = final_data_fatalities.to_dict(orient='records')
+    final_data_count = groupby_object_landslide.reset_index()
+    final_dict_count = final_data_count.to_dict(orient='records')
 
-    return final_dict
+    return {'fatalities': final_dict_fatalities, 'landslide_count': final_dict_count}
 
 
