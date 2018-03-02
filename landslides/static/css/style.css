@@ -1,17 +1,19 @@
-body{
+body {
     font-family: 'Oswald', sans-serif;
     font-size: 16px;
 }
 
 #mynetwork {
-    width: 600px;
-    height: 400px;
-    border: 1px solid lightgray;
+    width: 100vh;
+    height: 80vh;
+    align-content: center;
 }
 
+#map {
+  height: 500px;
+  width: 60%;
+}
 
-
-#map,
 body,
 html {
   height: 100%;

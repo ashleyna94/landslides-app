@@ -1,6 +1,8 @@
 # Import necessary libraries
 import os
 import numpy as np
+import pandas as pd
+from datetime import datetime
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
@@ -11,7 +13,7 @@ from flask import (
     request,
     redirect)
 # Python script for cleaning data
-# from data_clean_vis import clean_data_viz
+from data_clean_vis import clean_data_viz
 
 
 #################################################
@@ -35,10 +37,49 @@ Base.prepare(engine, reflect=True)
 Landslides = Base.classes.landslides
 session = Session(engine)
 
+
 # Create a route that renders index.html template
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+# create a route that outputs unique country names
+@app.route("/api/countrynames")
+def getCountryNames():
+
+    # Use Pandas to perform the sql query to obtain the unique country names
+    stmt = session.query(Landslides).statement
+    df = pd.read_sql_query(stmt, session.bind)
+    df = df[df['countryname']!="NaN"]
+    df = df[df['date']!="NaN"]
+    df['date'] = df['date'].apply(lambda x: datetime.strptime(x, "%m/%d/%Y"))
+    df['year'] = df['date'].dt.year
+    countriesList = list(df['countryname'].unique())
+
+    # Return a list of the unique country names
+    return jsonify(countriesList)
+
+
+# create a route that outputs landslide count by year for selected country
+@app.route("/api/<selectedcountry>")
+def dataford3plot(selectedcountry):
+
+    # Use Pandas to perform the sql query to obtain the unique country names
+    stmt = session.query(Landslides).statement
+    df = pd.read_sql_query(stmt, session.bind)
+    df = df[df['countryname']!="NaN"]
+    df = df[df['date']!="NaN"]
+    df['date'] = df['date'].apply(lambda x: datetime.strptime(x, "%m/%d/%Y"))
+    df['year'] = df['date'].dt.year
+    df = df.groupby(['countryname', 'year'])['id'].count().reset_index(level='year')
+    df.columns= ['year','count']
+    df = df.loc[selectedcountry]
+    json_for_d3 = df.to_json(orient='records')
+
+    # Return a list of the unique country names
+    return json_for_d3
+
 
 @app.route("/api/geodata")
 def geo():
@@ -94,14 +135,23 @@ def leaflet_geojson():
         landslide_map["properties"]["landslide_type"] = result[3]
         landslide_map["properties"]["trigger"] = result[4]
         mylist.append(landslide_map)
-    
-    geojson = {"type": "FeatureCollection", "features": mylist}
 
+    crsdict = {}
+    crsdict["type"] = "name"
+    crsdict["properties"] = {}
+    crsdict["properties"]["name"] = "urn:ogc:def:crs:OGC:1.3:CRS84"    
+    
+    geojson = {"type": "FeatureCollection", "features": mylist, "crs": crsdict}
+    
     return jsonify(geojson)
+
 
 @app.route("/api/vis")
 def clean_data_for_vis():
     return jsonify(clean_data_viz())
+
+
+
 
 
 if __name__ == "__main__":
