@@ -1,4 +1,9 @@
 
+
+///////////////////////////
+// javascript for plotly //
+///////////////////////////
+
 // populate country names
 function getCountryName() {
 
@@ -6,9 +11,9 @@ function getCountryName() {
     var selector = document.getElementById("selDataset");
 
     // Use the list of sample names to populate the select options
-    d3.json("/api/countrynames",function(error,countryNames){
+    d3.json("/api/countrynames", function (error, countryNames) {
 
-        for(var i=0; i<countryNames.length;i++){
+        for (var i = 0; i < countryNames.length; i++) {
             var currentOption = document.createElement('option')
             currentOption.text = countryNames[i]
             currentOption.value = countryNames[i]
@@ -17,68 +22,124 @@ function getCountryName() {
     })
 };
 
-function optionChanged(country){
-    // fetch new data each time a new country is selected
-    var getCountryUrl = "/api/"+country;
-    d3.json(getCountryUrl,function(error,countryData){
-        debug = countryData;
-    });
+var base_url = "/api/"
+getData(base_url + "United Kingdom");
+
+function getData(url) {
+    d3.json(url, function (data) {
+        buildPlot(data);
+    })
+}
+
+function optionChanged(country) {
+    var url = base_url + country;
+    getData(url);
+};
+
+function buildPlot(data) {
+    var yearArray = [];
+    var countArray = [];
+    var parseYear = d3.timeParse("%Y");
+
+    // fill each of the arrays with data
+    for (var i = 0; i < data.length; i++) {
+        yearArray.push(parseYear(data[i].year));
+        countArray.push(data[i].count);
+    }
+
+    // Create a trace object with the new arrays created
+    var trace1 =
+        {
+            x: yearArray,
+            y: countArray,
+            type: 'scatter'
+        };
+
+
+    var layout = {
+            title: "Trends in Landslide Occurances",
+            xaxis: {
+                title : "Year"
+            },
+            yaxis:{
+                title : "Number of Landslide Occurances"
+            }
+
+          };    
+
+
+    // create a data array with the traces
+    var data = [trace1]
+
+    Plotly.newPlot('timePlot', data,layout);
+
+}
+
+
+function init() {
+    getCountryName();
 };
 
 
-function init(){
-    getCountryName();
-}
-    
-
-// Store our API endpoint inside queryUrl
-var queryUrl = "/api/leaflet/geojson";
-
-// Perform a GET request to the query URL
-d3.json(queryUrl, function(data) {
-    // Once we get a response, assign the data.features object 
-
-  // Create a map object
-  var myMap = L.map("map", {
-    center: [37.09, -95.71],
-    zoom: 2
-      
-  });
-  
-  // Add a tile layer
-  L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?" +
-    "access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw"
-  ).addTo(myMap);
-  
-//   // Loop through the cities array and create one marker for each city, bind a popup containing its name and population add it to the map  
-    for (var i = 0; i < data.length; i++) {
-       L.circle(data.features[i].geometry.coordinates, {
-         fillOpacity: 0.75,
-         color: "black",
-         fillColor: "purple",
-         // Setting our circle's radius equal to the output of our markerSize function
-         // This will make our marker's size proportionate to its population
-         radius: 5
-       }).addTo(myMap);
-      }
-   
- });
-  
 
 // Initialize the dashboard
 init();
 
 
+
+///////////////////////////
+// javascript for leaflet //
+///////////////////////////
+
+
+// Store our API endpoint inside queryUrl
+var queryUrl = "/api/leaflet/geojson";
+
+// Perform a GET request to the query URL
+d3.json(queryUrl, function (data) {
+    // Once we get a response, assign the data.features object 
+
+    // Create a map object
+    var myMap = L.map("map", {
+        center: [37.09, -95.71],
+        zoom: 2
+
+    });
+
+    // Add a tile layer
+    L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?" +
+        "access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw"
+    ).addTo(myMap);
+
+    //   // Loop through the cities array and create one marker for each city, bind a popup containing its name and population add it to the map  
+    for (var i = 0; i < data.length; i++) {
+        L.circle(data.features[i].geometry.coordinates, {
+            fillOpacity: 0.75,
+            color: "black",
+            fillColor: "purple",
+            // Setting our circle's radius equal to the output of our markerSize function
+            // This will make our marker's size proportionate to its population
+            radius: 5
+        }).addTo(myMap);
+    }
+
+});
+
+
+///////////////////////////
+// javascript for network //
+///////////////////////////
+
 // create an array with nodes
 var nodes = new vis.DataSet([
     // inner circle nodes
-    { id: 1, label: 'Asia', color: '#4E495F', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
-    { id: 2, label: 'Africa', color: '#876C64', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
-    { id: 3, label: 'North America', color: '#A33B20', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
-    { id: 4, label: 'South America', color: '#A47963', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
-    { id: 5, label: 'Antartica', color: '#DEEAEA', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
-    { id: 6, label: 'Europe', color: '#A6A57A', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}},
-    { id: 7, label: 'Oceania', color: '#78A5A5', shape: 'circle', font: {strokeWidth: 3, strokeColor: 'white'}}
+    { id: 1, label: 'Asia', color: '#4E495F', shape: 'circle', font: { strokeWidth: 3, strokeColor: 'white' } },
+    { id: 2, label: 'Africa', color: '#876C64', shape: 'circle', font: { strokeWidth: 3, strokeColor: 'white' } },
+    { id: 3, label: 'North America', color: '#A33B20', shape: 'circle', font: { strokeWidth: 3, strokeColor: 'white' } },
+    { id: 4, label: 'South America', color: '#A47963', shape: 'circle', font: { strokeWidth: 3, strokeColor: 'white' } },
+    { id: 5, label: 'Antartica', color: '#DEEAEA', shape: 'circle', font: { strokeWidth: 3, strokeColor: 'white' } },
+    { id: 6, label: 'Europe', color: '#A6A57A', shape: 'circle', font: { strokeWidth: 3, strokeColor: 'white' } },
+    { id: 7, label: 'Oceania', color: '#78A5A5', shape: 'circle', font: { strokeWidth: 3, strokeColor: 'white' } }
 ]);
 // below code is used to add countries from json file into viz
 var vis_link = "/api/vis"
@@ -151,3 +212,10 @@ var options = {};
 
 // initialize your network!
 var network = new vis.Network(container, data, options);
+
+
+
+
+
+
+
