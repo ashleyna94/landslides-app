@@ -135,7 +135,7 @@ function createMap(markers) {
   
       {
             maxZoom: 18
-        });
+        };
 
     // create a baseMaps object to hold the lightmap layer
     var baseMaps = {
