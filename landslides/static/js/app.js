@@ -8,7 +8,7 @@ d3.json(queryUrl, function(data) {
   // Create a map object
   var myMap = L.map("map", {
     center: [37.09, -95.71],
-    zoom: 5
+    zoom: 3
   });
   
   // Add a tile layer
