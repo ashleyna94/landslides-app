@@ -98,6 +98,27 @@ var queryUrl = "/api/leaflet/geojson";
 // perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
 d3.json(queryUrl, createMarkers);
 
+function getColor(d) {
+    return d == "Small" ? 'green' :
+           d == "Medium"  ? 'yellow' :
+           d == "Large"  ? 'orange' :
+           d == "Very_large"  ? 'red' :
+           d == "unknown"   ? 'gray' :
+           d == "(blank)"  ? 'gray' :
+                    'gray';
+  }
+
+
+function getSize(d) {
+    return d == "Small" ? 1 :
+           d == "Medium"  ? 3 :
+           d == "Large"  ? 5 :
+           d == "Very_large"  ? 7 :
+           d == "unknown"   ? 1 :
+           d == "(blank)"  ? 1 :
+                    'gray' ;
+  }
+
 function createMarkers(response) {
 
     // pull the "features" property off of the response
@@ -105,20 +126,18 @@ function createMarkers(response) {
 
     // initialize an array to hold markers
     var markers = [];
-
+   
     // loop through the features array
     for (var index = 0; index < features.length; index++) {
         var coordinate = features[index].geometry.coordinates
 
         // for each station, create a marker and bind a popup with the station's name
         var marker = new L.CircleMarker([coordinate[0], coordinate[1]], {
-            radius: 2,
-            fillColor: "#ff7800",
-            color: "#000",
-            weight: 0,
-            opacity: 0,
-            fillOpacity: 0.5
+            radius: getSize(features[index].properties.landslide_size),
+            fillColor: getColor(features[index].properties.landslide_size),
+            color: getColor(features[index].properties.landslide_size)
         })
+
 
         // add the marker to the markers array
         markers.push(marker);
@@ -126,24 +145,32 @@ function createMarkers(response) {
 
     // create a layer group made from the markers array, pass it into the createMap function
     createMap(L.layerGroup(markers));
+    
+    
 }
+
 
 function createMap(markers) {
 
     // create the tile layer that will be the background of our map
-    var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXNlbGExOTgyIiwiYSI6ImNqZDNocXRlNTBoMWEyeXFmdWY1NnB2MmIifQ.ziEOjgHun64EAp4W3LlsQg",
-        {
+    var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXNlbGExOTgyIiwiYSI6ImNqZDNocXRlNTBoMWEyeXFmdWY1NnB2MmIifQ.ziEOjgHun64EAp4W3LlsQg");
+
+    var vintage = L.tileLayer("https://api.mapbox.com/styles/v1/andrewprice-ut/cje4qba6j1gpp2so2x22o93yw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw");
+
+    {
             maxZoom: 18
-        });
+        };
 
     // create a baseMaps object to hold the lightmap layer
     var baseMaps = {
-        "Light Map": lightmap
+        "Light Map": lightmap,
+        "Vintage": vintage
     };
 
     // create an overlayMaps object to hold the bikeStations layer
     var overlayMaps = {
         "Landslides": markers
+        // "Size": sizes
     };
 
     // Create the map object with options
@@ -159,7 +186,6 @@ function createMap(markers) {
         collapsed: false
     }).addTo(geoMap);
 }
-
 
 ///////////////////////////
 // javascript for network //
