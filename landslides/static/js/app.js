@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 // populate country names
 function getCountryName() {
@@ -29,7 +28,9 @@ function optionChanged(country){
 
 function init(){
     getCountryName();
-=======
+}
+    
+
 // Store our API endpoint inside queryUrl
 var queryUrl = "/api/leaflet/geojson";
 
@@ -63,18 +64,8 @@ for (var i = 0; i < data.features.length; i++) {
   });
   
 
-
-
-function buildPlot() {
-    /* data route */
-    var url = "/api/pals";
-    // @TODO: Create your plot here
->>>>>>> master
-}
-
 // Initialize the dashboard
 init();
-
 
 
 // create an array with nodes
