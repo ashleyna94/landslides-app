@@ -59,21 +59,21 @@ function buildPlot(data) {
 
 
     var layout = {
-            title: "Trends in Landslide Occurances",
-            xaxis: {
-                title : "Year"
-            },
-            yaxis:{
-                title : "Number of Landslide Occurances"
-            }
+        title: "Trends in Landslide Occurances",
+        xaxis: {
+            title: "Year"
+        },
+        yaxis: {
+            title: "Number of Landslide Occurances"
+        }
 
-          };    
+    };
 
 
     // create a data array with the traces
     var data = [trace1]
 
-    Plotly.newPlot('timePlot', data,layout);
+    Plotly.newPlot('timePlot', data, layout);
 
 }
 
@@ -88,44 +88,77 @@ function init() {
 init();
 
 
-
 ///////////////////////////
 // javascript for leaflet //
 ///////////////////////////
 
-
 // Store our API endpoint inside queryUrl
 var queryUrl = "/api/leaflet/geojson";
 
-// Perform a GET request to the query URL
-d3.json(queryUrl, function (data) {
-    // Once we get a response, assign the data.features object 
+// perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
+d3.json(queryUrl, createMarkers);
 
-    // Create a map object
-    var myMap = L.map("map", {
-        center: [37.09, -95.71],
-        zoom: 2
+function createMarkers(response) {
 
-    });
+    // pull the "features" property off of the response
+    var features = response.features;
 
-    // Add a tile layer
-    L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?" +
-        "access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw"
-    ).addTo(myMap);
+    // initialize an array to hold markers
+    var markers = [];
 
-    //   // Loop through the cities array and create one marker for each city, bind a popup containing its name and population add it to the map  
-    for (var i = 0; i < data.length; i++) {
-        L.circle(data.features[i].geometry.coordinates, {
-            fillOpacity: 0.75,
-            color: "black",
-            fillColor: "purple",
-            // Setting our circle's radius equal to the output of our markerSize function
-            // This will make our marker's size proportionate to its population
-            radius: 5
-        }).addTo(myMap);
+    // loop through the features array
+    for (var index = 0; index < features.length; index++) {
+        var coordinate = features[index].geometry.coordinates
+
+        // for each station, create a marker and bind a popup with the station's name
+        var marker = new L.CircleMarker([coordinate[0], coordinate[1]], {
+            radius: 2,
+            fillColor: "#ff7800",
+            color: "#000",
+            weight: 0,
+            opacity: 0,
+            fillOpacity: 0.5
+        })
+
+        // add the marker to the markers array
+        markers.push(marker);
     }
 
-});
+    // create a layer group made from the markers array, pass it into the createMap function
+    createMap(L.layerGroup(markers));
+}
+
+function createMap(markers) {
+
+    // create the tile layer that will be the background of our map
+    var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXNlbGExOTgyIiwiYSI6ImNqZDNocXRlNTBoMWEyeXFmdWY1NnB2MmIifQ.ziEOjgHun64EAp4W3LlsQg",
+        {
+            maxZoom: 18
+        });
+
+    // create a baseMaps object to hold the lightmap layer
+    var baseMaps = {
+        "Light Map": lightmap
+    };
+
+    // create an overlayMaps object to hold the bikeStations layer
+    var overlayMaps = {
+        "Landslides": markers
+    };
+
+    // Create the map object with options
+    var geoMap = L.map("map", {
+        center: [26.3351, 17.2283],
+        zoom: 2,
+        preferCanvas: true,
+        layers: [lightmap, markers]
+    });
+
+    // create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
+    L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+    }).addTo(geoMap);
+}
 
 
 ///////////////////////////
