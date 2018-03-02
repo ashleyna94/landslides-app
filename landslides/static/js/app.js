@@ -42,6 +42,7 @@ d3.json(queryUrl, function(data) {
   var myMap = L.map("map", {
     center: [37.09, -95.71],
     zoom: 2
+      
   });
   
   // Add a tile layer
@@ -49,19 +50,19 @@ d3.json(queryUrl, function(data) {
     "access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw"
   ).addTo(myMap);
   
-//   // Loop through the cities array and create one marker for each city, bind a popup containing its name and population add it to the map   
-
-// Create rain icon variable
-var landslideIcon = L.icon({
-    iconUrl: '/static/js/landslideicon.png',
-    iconSize: [15,10]
-});
-
-for (var i = 0; i < data.features.length; i++) {
-    L.marker(data.features[i].geometry.coordinates, {icon: landslideIcon}).bindPopup("<h3>" + "Type: " + data.features[i].properties.landslide_type + "</h3> <hr> <h3>Size: " + data.features[i].properties.landslide_size + "</h3>" + "<h3>" + "Trigger" + data.features[i].properties.trigger + "</h3>").addTo(myMap);
-   }
-    
-  });
+//   // Loop through the cities array and create one marker for each city, bind a popup containing its name and population add it to the map  
+    for (var i = 0; i < data.length; i++) {
+       L.circle(data.features[i].geometry.coordinates, {
+         fillOpacity: 0.75,
+         color: "white",
+         fillColor: "purple",
+         // Setting our circle's radius equal to the output of our markerSize function
+         // This will make our marker's size proportionate to its population
+         radius: 5
+       }).addTo(myMap);
+      }
+   
+ });
   
 
 // Initialize the dashboard
