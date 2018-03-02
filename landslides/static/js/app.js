@@ -269,7 +269,7 @@ function getData(url) {
     });
 }
 
-getData('/api/vis/fatalities')
+getData('/api/vis/fatalities');
 
 d3.select(".switch-container").on("change", function () {
     console.log("Switch", this);
