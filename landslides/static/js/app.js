@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // populate country names
 function getCountryName() {
@@ -28,6 +29,47 @@ function optionChanged(country){
 
 function init(){
     getCountryName();
+=======
+// Store our API endpoint inside queryUrl
+var queryUrl = "/api/leaflet/geojson";
+
+// Perform a GET request to the query URL
+d3.json(queryUrl, function(data) {
+    // Once we get a response, assign the data.features object 
+
+  // Create a map object
+  var myMap = L.map("map", {
+    center: [37.09, -95.71],
+    zoom: 2
+  });
+  
+  // Add a tile layer
+  L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?" +
+    "access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw"
+  ).addTo(myMap);
+  
+//   // Loop through the cities array and create one marker for each city, bind a popup containing its name and population add it to the map   
+
+// Create rain icon variable
+var landslideIcon = L.icon({
+    iconUrl: '/static/js/landslideicon.png',
+    iconSize: [15,10]
+});
+
+for (var i = 0; i < data.features.length; i++) {
+    L.marker(data.features[i].geometry.coordinates, {icon: landslideIcon}).bindPopup("<h3>" + "Type: " + data.features[i].properties.landslide_type + "</h3> <hr> <h3>Size: " + data.features[i].properties.landslide_size + "</h3>" + "<h3>" + "Trigger" + data.features[i].properties.trigger + "</h3>").addTo(myMap);
+   }
+    
+  });
+  
+
+
+
+function buildPlot() {
+    /* data route */
+    var url = "/api/pals";
+    // @TODO: Create your plot here
+>>>>>>> master
 }
 
 // Initialize the dashboard
