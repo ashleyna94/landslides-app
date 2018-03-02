@@ -21,6 +21,12 @@ body {
    overflow: hidden
 }
 
+#timePlot{
+  margin: auto;
+  height: 500px;
+  width: 100%;
+  overflow: hidden
+}
 
 .leaflet-popup-content {
   text-align: center;
