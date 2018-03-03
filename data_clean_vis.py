@@ -53,6 +53,6 @@ def clean_data_viz():
     final_data_count = groupby_object_landslide.reset_index()
     final_dict_count = final_data_count.to_dict(orient='records')
 
-    return {'fatalities': final_dict_fatalities, 'landslide_count': final_dict_count}
+    return final_dict_fatalities
 
 

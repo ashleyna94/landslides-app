@@ -146,9 +146,8 @@ def leaflet_geojson():
     return jsonify(geojson)
 
 
-@app.route("/api/vis/<name>")
-def clean_data_for_vis(name):
-    return jsonify(clean_data_viz().get(name))
+@app.route("/api/vis/fatalities")
+    return jsonify(clean_data_viz())
 
 if __name__ == "__main__":
     app.run(debug=True)
