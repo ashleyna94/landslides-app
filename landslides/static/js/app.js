@@ -259,6 +259,19 @@ d3.json(vis_link, function (error, data) {
             })
         }
     })
+   
+// create a network
+var container = document.getElementById('mynetwork');
+
+// provide the data in the vis format
+var data = {
+    nodes: nodes,
+    edges: edges
+};
+var options = {};
+
+// initialize your network!
+var network = new vis.Network(container, data, options);
 
 ///////////////////////////
 //// javascript for d3 ////
