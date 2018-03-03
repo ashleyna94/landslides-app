@@ -267,9 +267,9 @@ function getData(url) {
         // initialize your network!
         var network = new vis.Network(container, data, options);
     });
-}
+};
 
-getData("/api/vis/fatalities")
+getData("/api/vis/fatalities");
 
 d3.select(".switch-container").on("change", function () {
     console.log("Switch", this);
@@ -284,7 +284,7 @@ d3.select(".switch-container").on("change", function () {
         getData("/api/vis/landslide_count");
     }
 
-})
+});
 
 
 
