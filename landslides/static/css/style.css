@@ -21,12 +21,6 @@ body {
    overflow: hidden
 }
 
-#timePlot{
-  margin: auto;
-  height: 500px;
-  width: 100%;
-  overflow: hidden
-}
 
 .leaflet-popup-content {
   text-align: center;
@@ -114,10 +108,28 @@ body {
 
   /* d3 plots */
   .bar rect {
-    fill: steelblue;
+    fill: teal;
   }
   
   .bar text {
     fill: #fff;
     font: 10px sans-serif;
   }
+
+
+  hr { 
+    display: block;
+    margin : auto;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border-style: inset;
+    border-width: 8px;
+    background-color: slateblue;
+    width: 70%;
+}
+
+
+.d3 {
+  margin : auto;
+
+}

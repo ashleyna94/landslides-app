@@ -1,8 +1,8 @@
 
 
-///////////////////////////
-// javascript for plotly //
-///////////////////////////
+///////////////////////////////
+// javascript for plotly-lie //
+///////////////////////////////
 
 // populate country names
 function getCountryName() {
@@ -88,6 +88,52 @@ function init() {
 init();
 
 
+///////////////////////////////
+// javascript for plotly-pie //
+///////////////////////////////
+
+var pieBaseURL = "/api/pie/"
+getPieData(pieBaseURL + "Afghanistan");
+function getPieData(pieURL) {
+    d3.json(pieURL, function (pieData) {
+        buildPiePlot(pieData);
+    })
+}
+function optionChanged(country) {
+    var url = base_url + country;
+    var newPieURL = pieBaseURL + country;
+    getData(url);
+    getPieData(newPieURL);
+};
+
+function buildPiePlot(pieData) {
+
+    // Build pie chart
+    var pieValues = [];
+    var pieLabels = [];
+
+    // Fill each of the arrays with data
+    for (var i = 0; i < pieData.length; i++) {
+        pieValues.push(pieData[i].count);
+        pieLabels.push(pieData[i].trigger);
+    }
+    // Build Pie Chart
+    var data = [{
+        values: pieValues,
+        labels: pieLabels,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: "Landslide Triggers by Country"
+    }
+
+    var PIE = document.getElementById('pie');
+    Plotly.newPlot(PIE, data, layout);
+};
+
+
+
 ///////////////////////////
 // javascript for leaflet //
 ///////////////////////////
@@ -97,27 +143,6 @@ var queryUrl = "/api/leaflet/geojson";
 
 // perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
 d3.json(queryUrl, createMarkers);
-
-function getColor(d) {
-    return d == "Small" ? 'green' :
-        d == "Medium" ? 'blue' :
-            d == "Large" ? 'orange' :
-                d == "Very_large" ? 'red' :
-                    d == "unknown" ? 'gray' :
-                        d == "(blank)" ? 'gray' :
-                            'gray';
-}
-
-
-function getSize(d) {
-    return d == "Small" ? 1 :
-        d == "Medium" ? 3 :
-            d == "Large" ? 5 :
-                d == "Very_large" ? 7 :
-                    d == "unknown" ? 1 :
-                        d == "(blank)" ? 1 :
-                            'gray';
-}
 
 function createMarkers(response) {
 
@@ -133,12 +158,11 @@ function createMarkers(response) {
 
         // for each station, create a marker and bind a popup with the station's name
         var marker = new L.CircleMarker([coordinate[0], coordinate[1]], {
-            radius: getSize(features[index].properties.landslide_size) * 2,
-            fillColor: getColor(features[index].properties.landslide_size),
-            color: "black",
-            weight: 0.4
+            color: "purple",
+            radius: 4,
+            weight : 0,
+            opacity:0.5
         })
-
 
         // add the marker to the markers array
         markers.push(marker);
@@ -146,7 +170,6 @@ function createMarkers(response) {
 
     // create a layer group made from the markers array, pass it into the createMap function
     createMap(L.layerGroup(markers));
-
 
 }
 
@@ -158,9 +181,6 @@ function createMap(markers) {
 
     var vintage = L.tileLayer("https://api.mapbox.com/styles/v1/andrewprice-ut/cje4qba6j1gpp2so2x22o93yw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw");
 
-    {
-        maxZoom: 18
-    };
 
     // create a baseMaps object to hold the lightmap layer
     var baseMaps = {
@@ -263,7 +283,7 @@ d3.json(vis_link, function (error, data) {
 
 });
 
-   
+
 // create a network
 var container = document.getElementById('mynetwork');
 
@@ -327,7 +347,7 @@ var link = "/api/continent/AF";
 d3.json(link, function (response) {
     var data = response;
     var formatCount = d3.format(",.0f");
-    var svg = d3.select("svg"),
+    var svg = d3.select(".d3"),
         margin = { top: 10, right: 30, bottom: 100, left: 30 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
@@ -383,7 +403,7 @@ d3.json(link, function (response) {
 // function for updating the chart
 function update(arrayNew) {
 
-    var svg = d3.select("svg"),
+    var svg = d3.select(".d3"),
         margin = { top: 10, right: 30, bottom: 100, left: 30 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
@@ -443,5 +463,5 @@ function update(arrayNew) {
         .attr("class", "axis axis--x")
         .text("Distance")
 };
-  
+
 

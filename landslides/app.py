@@ -180,10 +180,30 @@ def leaflet_geojson():
     return jsonify(geojson)
 
 
-
+#########################################################################
+# create a route -  vis fatalities
+#########################################################################
 @app.route("/api/vis/fatalities")
-    return jsonify(clean_data_viz())
+def clean():
+   return jsonify(clean_data_viz())
 
+
+#########################################################################
+# create a route -  pie
+#########################################################################
+@app.route("/api/pie/<selectedcountry>")
+def piechartdata(selectedcountry):
+    # Use Pandas to perform the sql query to obtain the unique country names
+    stmt = session.query(Landslides).statement
+    df = pd.read_sql_query(stmt, session.bind)
+    df = df[df['countryname']!="NaN"]
+    df = df[df['trigger']!="NaN"]
+    df = df.groupby(['countryname', 'trigger'])['id'].count().reset_index(level='trigger')
+    df.columns = ['trigger','count']
+    df = df.loc[selectedcountry]
+    trigger_json = df.to_json(orient='records')
+   
+    return trigger_json
 
 
 if __name__ == "__main__":
