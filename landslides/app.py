@@ -37,14 +37,16 @@ Base.prepare(engine, reflect=True)
 Landslides = Base.classes.landslides
 session = Session(engine)
 
-
+#################################################
 # Create a route that renders index.html template
+#################################################
 @app.route("/")
 def home():
     return render_template("index.html")
 
-
+#################################################
 # create a route that outputs unique country names
+#################################################
 @app.route("/api/countrynames")
 def getCountryNames():
 
@@ -60,10 +62,11 @@ def getCountryNames():
     # Return a list of the unique country names
     return jsonify(countriesList)
 
-
+#########################################################################
 # create a route that outputs landslide count by year for selected country
+#########################################################################
 @app.route("/api/<selectedcountry>")
-def dataford3plot(selectedcountry):
+def dataForPlotlyPlot(selectedcountry):
 
     # Use Pandas to perform the sql query to obtain the unique country names
     stmt = session.query(Landslides).statement
@@ -75,12 +78,35 @@ def dataford3plot(selectedcountry):
     df = df.groupby(['countryname', 'year'])['id'].count().reset_index(level='year')
     df.columns= ['year','count']
     df = df.loc[selectedcountry]
-    json_for_d3 = df.to_json(orient='records')
+    json_for_plotly = df.to_json(orient='records')
 
     # Return a list of the unique country names
-    return json_for_d3
+    return json_for_plotly
 
 
+#########################################################################
+# create a route that outputs landslide distance for a seleted cotinent
+#########################################################################
+@app.route("/api/continent/<selectedcontinent>")
+def dataForD3Plot(selectedcontinent):
+
+    print(selectedcontinent)
+    # Use Pandas to perform the sql query to get the list of distances for a given continent
+    stmt = session.query(Landslides).statement
+    df = pd.read_sql_query(stmt, session.bind)
+    df = df[df['countryname']!="NaN"]
+    df = df[df['date']!="NaN"]
+    df['date'] = df['date'].apply(lambda x: datetime.strptime(x, "%m/%d/%Y"))
+    df['year'] = df['date'].dt.year
+    df = df[['continentcode','distance']].set_index('continentcode')
+    json_for_d3 =  list(df.loc[selectedcontinent]['distance'])
+
+    # Return a list of distances
+    return jsonify(json_for_d3)
+
+#########################################################################
+# create a route - geodata
+#########################################################################
 @app.route("/api/geodata")
 def geo():
     results = session.query(Landslides.hazard_type, Landslides.latitude, Landslides.longitude).all()
@@ -96,6 +122,10 @@ def geo():
     }]
 
     return jsonify(geo_data)
+
+#########################################################################
+# create a route - leaflet
+#########################################################################
 
 @app.route("/api/leaflet")
 def landslide_map():
@@ -116,6 +146,10 @@ def landslide_map():
 
     return jsonify(mylist)
 
+
+#########################################################################
+# create a route - leaflet-geojson
+#########################################################################
 @app.route("/api/leaflet/geojson")
 def leaflet_geojson():
     sel = [Landslides.latitude, Landslides.longitude, Landslides.landslide_size, Landslides.landslide_type, Landslides.trigger]
@@ -146,8 +180,11 @@ def leaflet_geojson():
     return jsonify(geojson)
 
 
+
 @app.route("/api/vis/fatalities")
     return jsonify(clean_data_viz())
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

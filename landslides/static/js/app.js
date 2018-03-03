@@ -98,6 +98,27 @@ var queryUrl = "/api/leaflet/geojson";
 // perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
 d3.json(queryUrl, createMarkers);
 
+function getColor(d) {
+    return d == "Small" ? 'green' :
+           d == "Medium"  ? 'blue' :
+           d == "Large"  ? 'orange' :
+           d == "Very_large"  ? 'red' :
+           d == "unknown"   ? 'gray' :
+           d == "(blank)"  ? 'gray' :
+                    'gray';
+  }
+
+
+function getSize(d) {
+    return d == "Small" ? 1 :
+           d == "Medium"  ? 3 :
+           d == "Large"  ? 5 :
+           d == "Very_large"  ? 7 :
+           d == "unknown"   ? 1 :
+           d == "(blank)"  ? 1 :
+                    'gray' ;
+  }
+
 function createMarkers(response) {
 
     // pull the "features" property off of the response
@@ -105,20 +126,19 @@ function createMarkers(response) {
 
     // initialize an array to hold markers
     var markers = [];
-
+   
     // loop through the features array
     for (var index = 0; index < features.length; index++) {
         var coordinate = features[index].geometry.coordinates
 
         // for each station, create a marker and bind a popup with the station's name
         var marker = new L.CircleMarker([coordinate[0], coordinate[1]], {
-            radius: 2,
-            fillColor: "#ff7800",
-            color: "#000",
-            weight: 0,
-            opacity: 0,
-            fillOpacity: 0.5
+            radius: getSize(features[index].properties.landslide_size) * 2,
+            fillColor: getColor(features[index].properties.landslide_size),
+            color: "black",
+            weight: 0.4
         })
+
 
         // add the marker to the markers array
         markers.push(marker);
@@ -126,24 +146,32 @@ function createMarkers(response) {
 
     // create a layer group made from the markers array, pass it into the createMap function
     createMap(L.layerGroup(markers));
+    
+    
 }
+
 
 function createMap(markers) {
 
     // create the tile layer that will be the background of our map
-    var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXNlbGExOTgyIiwiYSI6ImNqZDNocXRlNTBoMWEyeXFmdWY1NnB2MmIifQ.ziEOjgHun64EAp4W3LlsQg",
-        {
+    var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXNlbGExOTgyIiwiYSI6ImNqZDNocXRlNTBoMWEyeXFmdWY1NnB2MmIifQ.ziEOjgHun64EAp4W3LlsQg");
+
+    var vintage = L.tileLayer("https://api.mapbox.com/styles/v1/andrewprice-ut/cje4qba6j1gpp2so2x22o93yw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw");
+
+    {
             maxZoom: 18
-        });
+        };
 
     // create a baseMaps object to hold the lightmap layer
     var baseMaps = {
-        "Light Map": lightmap
+        "Light Map": lightmap,
+        "Vintage": vintage
     };
 
     // create an overlayMaps object to hold the bikeStations layer
     var overlayMaps = {
         "Landslides": markers
+        // "Size": sizes
     };
 
     // Create the map object with options
@@ -159,7 +187,6 @@ function createMap(markers) {
         collapsed: false
     }).addTo(geoMap);
 }
-
 
 ///////////////////////////
 // javascript for network //
@@ -233,21 +260,156 @@ d3.json(vis_link, function (error, data) {
         }
     })
 
+///////////////////////////
+//// javascript for d3 ////
+///////////////////////////
 
-});
+// functions for toggling between data
+function change(value) {
+    if (value === 'AF') {
+        var link = "/api/continent/" + value;
+        d3.json(link, function (response) {
+            update(response)
+        });
 
-// create a network
-var container = document.getElementById('mynetwork');
+    } else if (value === 'AS') {
+        var link = "/api/continent/" + value;
+        d3.json(link, function (response) {
+            update(response)
+        });
 
-// provide the data in the vis format
-var data = {
-    nodes: nodes,
-    edges: edges
+    } else if (value === 'EU') {
+        var link = "/api/continent/" + value;
+        d3.json(link, function (response) {
+            update(response)
+        });
+
+    } else if (value === 'NA') {
+        var link = "/api/continent/" + value;
+        d3.json(link, function (response) {
+            update(response)
+        });
+
+    } else if (value === 'OC') {
+        var link = "/api/continent/" + value;
+        d3.json(link, function (response) {
+            update(response)
+        });
+
+    } else if (value === 'SA') {
+        var link = "/api/continent/" + value;
+        d3.json(link, function (response) {
+            update(response)
+        });
+    }
 };
-var options = {};
-
-// initialize your network!
-var network = new vis.Network(container, data, options);
 
 
+var link = "/api/continent/AF";
+
+d3.json(link, function (response) {
+    var data = response;
+    var formatCount = d3.format(",.0f");
+    var svg = d3.select("svg"),
+        margin = { top: 10, right: 30, bottom: 30, left: 30 },
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scaleLinear()
+        .rangeRound([0, width]);
+
+    var bins = d3.histogram()
+        .domain(x.domain())
+        .thresholds(x.ticks(20))
+        (data);
+
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(bins, function (d) { return d.length; })])
+        .range([height, 0]);
+
+    var bar = g.selectAll(".bar")
+        .data(bins)
+        .enter().append("g")
+        .attr("class", "bar")
+        .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; });
+
+    bar.append("rect")
+        .attr("x", 1)
+        .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+        .attr("height", function (d) { return height - y(d.length); });
+
+    bar.append("text")
+        .attr("dy", ".75em")
+        .attr("y", 6)
+        .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
+        .attr("text-anchor", "middle")
+        .text(function (d) { return formatCount(d.length); });
+
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+})
+
+// function for updating the chart
+function update(arrayNew) {
+
+    var svg = d3.select("svg"),
+        margin = { top: 10, right: 30, bottom: 30, left: 30 },
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.selectAll("g.bar").remove()
+    svg.selectAll("g.axis").remove()
+
+    var data = arrayNew;
+
+
+    var formatCount = d3.format(",.0f");
+
+};
+
+    var x = d3.scaleLinear()
+        .rangeRound([0, width]);
+
+    var bins = d3.histogram()
+        .domain(x.domain())
+        .thresholds(x.ticks(20))
+        (data);
+
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(bins, function (d) { return d.length; })])
+        .range([height, 0]);
+
+
+    var bar = g.selectAll(".bar")
+        .data(bins)
+        .enter()
+        .append("g")
+        .attr("class", "bar")
+        .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; });
+
+    bar.append("rect")
+        .transition()
+        .duration(1000)
+        .attr("x", 1)
+        .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+        .attr("height", function (d) { return height - y(d.length); });
+
+    bar.append("text")
+        .attr("dy", ".75em")
+        .attr("y", 6)
+        .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
+        .attr("text-anchor", "middle")
+        .text(function (d) { return formatCount(d.length); });
+
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+};
 

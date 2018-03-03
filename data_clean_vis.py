@@ -44,7 +44,7 @@ def clean_data_viz():
     data_v2['fatalities'] = data_v2['fatalities'].apply(pd.to_numeric)
 
     # group df by continent then country
-    groupby_object = data_v2.groupby(['continent_code', 'country_code']).sum()
+    groupby_object_fatalities = data_v2.groupby(['continent_code', 'country_code']).sum()
     groupby_object_landslide = data_v2.groupby(['continent_code', 'country_code']).count()
     # reset index 
     # TADA final set
