@@ -383,8 +383,6 @@ function update(arrayNew) {
 
     var formatCount = d3.format(",.0f");
 
-};
-
     var x = d3.scaleLinear()
         .rangeRound([0, width]);
 
