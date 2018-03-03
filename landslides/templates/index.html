@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-       
+
     <div class="container">
         <!-- The div where we will inject our map -->
         <div class="row">
@@ -59,8 +59,8 @@
     </div>
 
     <div class="container">
-            <h2>Time Series representation of Landslides by Country</h2>
-        <div class="row" style="margin-top:10px;margin-bottom:10px">    
+        <h2>Time Series representation of Landslides by Country</h2>
+        <div class="row" style="margin-top:10px;margin-bottom:10px">
             <div class="col-md-3">
                 <h5>Select Country:</h5>
                 <select id="selDataset" onchange="optionChanged(this.value)"></select>
@@ -69,6 +69,39 @@
             <div class="col-md-9">
                 <div id="timePlot"></div>
             </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h2>Histogram on Landslide Distances by Continents</h2>
+        <div class="row" style="margin-top:10px;margin-bottom:10px">
+
+            <div class="radio">
+                <label class="radio-inline">
+                    <input type="radio" name="continent" id="inlineRadio1" value="AF" onclick="change(this.value)"> Africa
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="continent" id="inlineRadio2" value="AS" onclick="change(this.value)"> Asia
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="continent" id="inlineRadio3" value="EU" onclick="change(this.value)"> Europe
+                </label>
+
+                <label class="radio-inline">
+                    <input type="radio" name="continent" id="inlineRadio3" value="NA" onclick="change(this.value)"> North America
+                </label>
+
+                <label class="radio-inline">
+                    <input type="radio" name="continent" id="inlineRadio3" value="OC" onclick="change(this.value)"> Oceania
+                </label>
+
+                <label class="radio-inline">
+                    <input type="radio" name="continent" id="inlineRadio3" value="SA" onclick="change(this.value)"> South America
+                </label>
+            </div>
+
+            <svg width="960" height="500"></svg>
         </div>
     </div>
 
