@@ -259,6 +259,10 @@ d3.json(vis_link, function (error, data) {
             })
         }
     })
+
+
+});
+
    
 // create a network
 var container = document.getElementById('mynetwork');
