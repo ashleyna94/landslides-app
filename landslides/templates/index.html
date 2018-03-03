@@ -17,7 +17,8 @@
     <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
 
     <!-- bootstrap stylesheets and js-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 
@@ -35,86 +36,92 @@
 
 <body>
     <div class="container">
-        <div class="jumbotron" style="text-align: center;padding:40px;margin-top:10px;margin-bottom:20px">
+        <div class="jumbotron" style="text-align: center;padding:40px;margin-top:20px;margin-bottom:20px;background-color:#5C80BC;">
             <h1>Exploration of Landslides</h1>
         </div>
     </div>
 
-    <hr>
-
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Network Visualization of the Distribution of Landslides</h2>
-                <div id="mynetwork" style="margin-bottom:10px"></div>
+        <h2>Network Visualization of the Distribution of Landslides</h2>
+        <div class="row" style="margin-bottom:10px">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div id="mynetwork" style="margin-bottom:10px"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <hr>
 
     <div class="container">
+        <h2>Geographic Visualization of Landslide Occurances</h2>
         <!-- The div where we will inject our map -->
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Geographic Visualization of Landslide Occurances</h2>
-                <div id="map" style="margin-bottom:10px"></div>
+        <div class="row" style="margin-bottom:10px">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div id="map" style="margin-bottom:10px"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <hr>
 
     <div class="container">
         <h2>Trends and Landslide Triggers by Country</h2>
         <div class="row" style="margin-bottom:10px">
-            <div class="col-md-12">
-                <h5>Select Country:</h5>
-                <select id="selDataset" onchange="optionChanged(this.value)"></select>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <h5>Select Country:</h5>
+                        <select id="selDataset" onchange="optionChanged(this.value)"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="timePlot"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="pie"></div>
+                    </div>
+                </div>
             </div>
-
-            <div class="col-md-6">
-                <div id="timePlot"></div>
-            </div>
-    
-            <div class="col-md-6">
-                <div id="pie"></div>
-            </div>
-     
         </div>
     </div>
-
-    <hr>
 
     <div class="container">
         <h2>Histogram on Landslide Distances by Continents</h2>
         <div class="row" style="margin-bottom:10px">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="radio" style="margin-left:350px">
+                        <label class="radio-inline">
+                            <input type="radio" name="continent" id="inlineRadio1" value="AF" onclick="change(this.value)" checked> Africa
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="continent" id="inlineRadio2" value="AS" onclick="change(this.value)"> Asia
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="continent" id="inlineRadio3" value="EU" onclick="change(this.value)"> Europe
+                        </label>
 
-            <div class="radio" style="margin:auto">
-                <label class="radio-inline">
-                    <input type="radio" name="continent" id="inlineRadio1" value="AF" onclick="change(this.value)" checked> Africa
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="continent" id="inlineRadio2" value="AS" onclick="change(this.value)"> Asia
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="continent" id="inlineRadio3" value="EU" onclick="change(this.value)"> Europe
-                </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="continent" id="inlineRadio3" value="NaN" onclick="change(this.value)"> North America
+                        </label>
 
-                <label class="radio-inline">
-                    <input type="radio" name="continent" id="inlineRadio3" value="NaN" onclick="change(this.value)"> North America
-                </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="continent" id="inlineRadio3" value="OC" onclick="change(this.value)"> Oceania
+                        </label>
 
-                <label class="radio-inline">
-                    <input type="radio" name="continent" id="inlineRadio3" value="OC" onclick="change(this.value)"> Oceania
-                </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="continent" id="inlineRadio3" value="SA" onclick="change(this.value)"> South America
+                        </label>
+                    </div>
 
-                <label class="radio-inline">
-                    <input type="radio" name="continent" id="inlineRadio3" value="SA" onclick="change(this.value)"> South America
-                </label>
+                    <svg class="d3" width="960" height="500"></svg>
+                </div>
             </div>
-
-            <svg class="d3" width="960" height="500"></svg>
         </div>
     </div>
 

@@ -108,7 +108,7 @@ body {
 
   /* d3 plots */
   .bar rect {
-    fill: teal;
+    fill: #5C80BC;
   }
   
   .bar text {
@@ -124,18 +124,17 @@ body {
     margin-bottom: 0.5em;
     border-style: inset;
     border-width: 8px;
-    background-color: slateblue;
+    background-color: #5C80BC;
     width: 75%;
 }
 
 
 .d3 {
-  margin : auto;
-
+  margin-left:100px;
 }
 
 /* add radio button styling */
-input[type="radio"]{
-  margin: 0 15px 0 15px;
-}
+/* input[type="radio"]{
+  margin: 0 5px 0 5px;
+} */
 

@@ -348,7 +348,7 @@ d3.json(link, function (response) {
     var data = response;
     var formatCount = d3.format(",.0f");
     var svg = d3.select(".d3"),
-        margin = { top: 10, right: 30, bottom: 100, left: 30 },
+        margin = { top: 10, right: 30, bottom: 100, left: 60 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -369,6 +369,7 @@ d3.json(link, function (response) {
         .range([height, 0]);
 
     var xAxis = d3.axisBottom().scale(x);
+    var yAxis = d3.axisLeft().scale(y);
 
     var bar = g.selectAll(".bar")
         .data(bins)
@@ -393,10 +394,20 @@ d3.json(link, function (response) {
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + 0 + ")")
+        .call(yAxis);
+
     g.append("text")
-        .attr("transform", `translate(${width - 50},${height + 30})`)
+        .attr("transform", `translate(${width - 50},${height + 35})`)
         .attr("class", "axis axis--x")
         .text("Distance")
+
+    g.append("text")
+        .attr("transform", `translate(-40,${height / 2})rotate(270)`)
+        .attr("class", "axis-text-y")
+        .text("Frequency");
 
 })
 
@@ -404,7 +415,7 @@ d3.json(link, function (response) {
 function update(arrayNew) {
 
     var svg = d3.select(".d3"),
-        margin = { top: 10, right: 30, bottom: 100, left: 30 },
+        margin = { top: 10, right: 30, bottom: 100, left: 60 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -431,6 +442,7 @@ function update(arrayNew) {
         .range([height, 0]);
 
     var xAxis = d3.axisBottom().scale(x);
+    var yAxis = d3.axisLeft().scale(y);
 
     var bar = g.selectAll(".bar")
         .data(bins)
@@ -441,6 +453,7 @@ function update(arrayNew) {
 
     bar.append("rect")
         .transition()
+        .ease(d3.easeCircle)
         .duration(1000)
         .attr("x", 1)
         .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
@@ -454,14 +467,30 @@ function update(arrayNew) {
         .text(function (d) { return formatCount(d.length); });
 
     g.append("g")
+        .transition()
+        .ease(d3.easeCircle)
+        .duration(1000)
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
+    g.append("g")
+        .transition()
+        .ease(d3.easeCircle)
+        .duration(1000)
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + 0 + ")")
+        .call(yAxis);
+
     g.append("text")
-        .attr("transform", `translate(${width - 50},${height + 30})`)
+        .attr("transform", `translate(${width - 50},${height + 35})`)
         .attr("class", "axis axis--x")
         .text("Distance")
+
+    g.append("text")
+        .attr("transform", `translate(-40,${height / 2})rotate(270)`)
+        .attr("class", "axis-text-y")
+        .text("Frequency");
 };
 
 
