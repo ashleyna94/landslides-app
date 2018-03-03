@@ -100,24 +100,24 @@ d3.json(queryUrl, createMarkers);
 
 function getColor(d) {
     return d == "Small" ? 'green' :
-           d == "Medium"  ? 'blue' :
-           d == "Large"  ? 'orange' :
-           d == "Very_large"  ? 'red' :
-           d == "unknown"   ? 'gray' :
-           d == "(blank)"  ? 'gray' :
-                    'gray';
-  }
+        d == "Medium" ? 'blue' :
+            d == "Large" ? 'orange' :
+                d == "Very_large" ? 'red' :
+                    d == "unknown" ? 'gray' :
+                        d == "(blank)" ? 'gray' :
+                            'gray';
+}
 
 
 function getSize(d) {
     return d == "Small" ? 1 :
-           d == "Medium"  ? 3 :
-           d == "Large"  ? 5 :
-           d == "Very_large"  ? 7 :
-           d == "unknown"   ? 1 :
-           d == "(blank)"  ? 1 :
-                    'gray' ;
-  }
+        d == "Medium" ? 3 :
+            d == "Large" ? 5 :
+                d == "Very_large" ? 7 :
+                    d == "unknown" ? 1 :
+                        d == "(blank)" ? 1 :
+                            'gray';
+}
 
 function createMarkers(response) {
 
@@ -126,7 +126,7 @@ function createMarkers(response) {
 
     // initialize an array to hold markers
     var markers = [];
-   
+
     // loop through the features array
     for (var index = 0; index < features.length; index++) {
         var coordinate = features[index].geometry.coordinates
@@ -146,8 +146,8 @@ function createMarkers(response) {
 
     // create a layer group made from the markers array, pass it into the createMap function
     createMap(L.layerGroup(markers));
-    
-    
+
+
 }
 
 
@@ -159,8 +159,8 @@ function createMap(markers) {
     var vintage = L.tileLayer("https://api.mapbox.com/styles/v1/andrewprice-ut/cje4qba6j1gpp2so2x22o93yw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYW5kcmV3cHJpY2UtdXQiLCJhIjoiY2pkaG5mZndyMHh0cDMzcmxqNGJocTBhcyJ9.bp8toFh-kL7HIXZZg43rjw");
 
     {
-            maxZoom: 18
-        };
+        maxZoom: 18
+    };
 
     // create a baseMaps object to hold the lightmap layer
     var baseMaps = {
@@ -301,7 +301,7 @@ function change(value) {
             update(response)
         });
 
-    } else if (value === 'NA') {
+    } else if (value === 'NaN') {
         var link = "/api/continent/" + value;
         d3.json(link, function (response) {
             update(response)
@@ -328,22 +328,27 @@ d3.json(link, function (response) {
     var data = response;
     var formatCount = d3.format(",.0f");
     var svg = d3.select("svg"),
-        margin = { top: 10, right: 30, bottom: 30, left: 30 },
+        margin = { top: 10, right: 30, bottom: 100, left: 30 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
     var x = d3.scaleLinear()
+        .domain([0, d3.max(data)])
         .rangeRound([0, width]);
 
-    var bins = d3.histogram()
+    var histogram = d3.histogram()
         .domain(x.domain())
-        .thresholds(x.ticks(20))
-        (data);
+        .thresholds(10);
+
+    var bins = histogram(data);
 
     var y = d3.scaleLinear()
         .domain([0, d3.max(bins, function (d) { return d.length; })])
         .range([height, 0]);
+
+    var xAxis = d3.axisBottom().scale(x);
 
     var bar = g.selectAll(".bar")
         .data(bins)
@@ -366,7 +371,12 @@ d3.json(link, function (response) {
     g.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
+        .call(xAxis);
+
+    g.append("text")
+        .attr("transform", `translate(${width - 50},${height + 30})`)
+        .attr("class", "axis axis--x")
+        .text("Distance")
 
 })
 
@@ -374,7 +384,7 @@ d3.json(link, function (response) {
 function update(arrayNew) {
 
     var svg = d3.select("svg"),
-        margin = { top: 10, right: 30, bottom: 30, left: 30 },
+        margin = { top: 10, right: 30, bottom: 100, left: 30 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -384,6 +394,54 @@ function update(arrayNew) {
 
     var data = arrayNew;
 
+    var formatCount = d3.format(",.0f");
+
+    var x = d3.scaleLinear()
+        .domain([0, d3.max(data)])
+        .rangeRound([0, width]);
+
+    var histogram = d3.histogram()
+        .domain(x.domain())
+        .thresholds(10);
+
+    var bins = histogram(data);
+
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(bins, function (d) { return d.length; })])
+        .range([height, 0]);
+
+    var xAxis = d3.axisBottom().scale(x);
+
+    var bar = g.selectAll(".bar")
+        .data(bins)
+        .enter()
+        .append("g")
+        .attr("class", "bar")
+        .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; });
+
+    bar.append("rect")
+        .transition()
+        .duration(1000)
+        .attr("x", 1)
+        .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+        .attr("height", function (d) { return height - y(d.length); });
+
+    bar.append("text")
+        .attr("dy", ".75em")
+        .attr("y", 6)
+        .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
+        .attr("text-anchor", "middle")
+        .text(function (d) { return formatCount(d.length); });
+
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    g.append("text")
+        .attr("transform", `translate(${width - 50},${height + 30})`)
+        .attr("class", "axis axis--x")
+        .text("Distance")
 };
   
 
