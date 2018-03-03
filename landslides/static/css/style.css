@@ -133,3 +133,9 @@ body {
   margin : auto;
 
 }
+
+/* add radio button styling */
+input[type="radio"]{
+  margin: 0 15px 0 15px;
+}
+
