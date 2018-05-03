@@ -4,7 +4,7 @@ This goal of this project was to create a JavaScript based dashboard on landslid
 
 #### Project Team:
 * Andrew Price
-* Ashely Na
+* Ashley Na
 * Antonio Kufoy
 * Asela Dassanayake
 
