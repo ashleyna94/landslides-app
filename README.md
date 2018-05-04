@@ -8,7 +8,7 @@ This goal of this project was to create a JavaScript based dashboard on landslid
 * Antonio Kufoy
 * Asela Dassanayake
 
-#### Technology stack used in developing this web application is as follows:
+#### Technology Used in Development of the Web Application:
 
 * Back End: 
   * Flask
@@ -24,7 +24,7 @@ This goal of this project was to create a JavaScript based dashboard on landslid
   * JS libraries used for plotting: D3.js, Plotly.js, Leaflet.js, Vis.js
 
 
-#### Images from the final app
+#### Images from the Final Application
 ![final_app_part1.png](images/final_app_part1.png)
 ![final_app_part2.png](images/final_app_part2.png)
 
