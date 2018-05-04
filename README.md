@@ -24,12 +24,12 @@ This goal of this project was to create a JavaScript based dashboard on landslid
   * JS libraries used for plotting: D3.js, Plotly.js, Leaflet.js, Vis.js
 
 
-#### Images from the Final Application
+#### Images from the Final Application:
 ![final_app_part1.png](images/final_app_part1.png)
 ![final_app_part2.png](images/final_app_part2.png)
 
 
-#### References :
+#### References:
 ##### Citations
     Kirschbaum, D. B., Adler, R., Hong, Y., Hill, S., & Lerner-Lam, A. (2010). A global landslide catalog for hazard applications: method, results, and limitations. Natural Hazards, 52(3), 561–575. doi:10.1007/s11069-009-9401-4. [1]
 
