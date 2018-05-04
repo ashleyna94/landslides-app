@@ -2,6 +2,7 @@
 landslides/__pycache__/
 landslides/.ipynb_checkpoints
 landslides/jupyternotebooks/.ipynb_checkpoints
+loadcsvdata/.ipynb_checkpoints
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
