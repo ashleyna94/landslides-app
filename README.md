@@ -1,14 +1,23 @@
 # Landslide Dashboard
 
-This goal of this project was to create a JavaScript based dashboard on landslides based on the the Global Landslide Catalog (GLC). The dataset was extracted from the NASA's Open Data Portal.  This dataset on data.nasa.gov was a one-time export from the Global Landslide Catalog maintained separately. It is current as of March 7, 2016. The GLC considers all types of mass movements triggered by rainfall, which have been reported in the media, disaster databases, scientific reports, or other sources. The GLC has been compiled since 2007 at NASA Goddard Space Flight Center. 
+### [Live App](https://landslides.herokuapp.com/)
+
+-----
 
 #### Project Team:
-* Andrew Price
-* Ashley Na
-* Antonio Kufoy
-* Asela Dassanayake
+* [Andrew Price](https://github.com/andrewprice-ut/andrew_repo)
+* [Ashley Na](https://github.com/ashleyna94/ashley-na)
+* [Antonio Kufoy](https://github.com/akufoy)
+* [Asela Dassanayake](https://github.com/asela1982)
 
-#### Technology Used in Development of the Web Application:
+-----
+
+#### Project Overview
+The goal of this project was to create a JavaScript-based dashboard on landslides based on the the Global Landslide Catalog (GLC). The dataset was extracted from the [NASA's Open Data Portal](https://data.nasa.gov/Earth-Science/Global-Landslide-Catalog-Export/dd9e-wu2v). The dataset was exported once then maintained separately. It is current as of March 7, 2016. The GLC considers all types of mass movements triggered by rainfall, which have been reported in the media, disaster databases, scientific reports, or other sources. The GLC has been compiled since 2007 at NASA Goddard Space Flight Center. 
+
+-----
+
+#### Technology Used in the Development of the Web Application:
 
 * Back End: 
   * Flask
@@ -23,11 +32,13 @@ This goal of this project was to create a JavaScript based dashboard on landslid
   * Javascript
   * JS libraries used for plotting: D3.js, Plotly.js, Leaflet.js, Vis.js
 
+-----
 
 #### Images from the Final Application:
 ![final_app_part1.png](images/final_app_part1.png)
 ![final_app_part2.png](images/final_app_part2.png)
 
+-----
 
 #### References:
 ##### Citations
