@@ -4,7 +4,7 @@
 
 -----
 
-#### Project Team:
+#### Project Team
 * [Andrew Price](https://github.com/andrewprice-ut/andrew_repo)
 * [Ashley Na](https://github.com/ashleyna94/ashley-na)
 * [Antonio Kufoy](https://github.com/akufoy)
@@ -17,7 +17,7 @@ The goal of this project was to create a JavaScript-based dashboard on landslide
 
 -----
 
-#### Technology Used in the Development of the Web Application:
+#### Technologies Used in the Development of the Web Application
 
 * Back End: 
   * Flask
@@ -34,13 +34,13 @@ The goal of this project was to create a JavaScript-based dashboard on landslide
 
 -----
 
-#### Images from the Final Application:
+#### Images from the Final Application
 ![final_app_part1.png](images/final_app_part1.png)
 ![final_app_part2.png](images/final_app_part2.png)
 
 -----
 
-#### References:
+#### References
 ##### Citations
     Kirschbaum, D. B., Adler, R., Hong, Y., Hill, S., & Lerner-Lam, A. (2010). A global landslide catalog for hazard applications: method, results, and limitations. Natural Hazards, 52(3), 561–575. doi:10.1007/s11069-009-9401-4. [1]
 
